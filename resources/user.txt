@@ -1,0 +1,4 @@
+1,group_0129,group_0129,organizer,group_0129
+0,violet,1234567890,speaker,violet
+0,zhangziyue,1234567890,attendee,zhangziyue
+1,anqipang ,1234567890,attendee,anqipang

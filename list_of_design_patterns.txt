@@ -1,0 +1,31 @@
+LIST OF DESIGN PATTERNS
+
+Strategy
+* Classes: MainController, UserInputController, OrganizerInputController, SpeakerUserInputController, AttendeeInputController, AdminUserInputController
+* How: OrganizerInputController, SpeakerUserInputController, AttendeeInputController and AdminUserInputController inherit from UserInputController, which are responsible for getting input from organizers, speakers, attendees and admin users respectively. They can be viewed as different strategies to get input from the user, since they accept different sets of commands from the user and process different commands in different ways. Their abstraction, including getting a command from the user and generating the menu, are captured in abstract class UserInputController which they all inherit from. In MainController, a variable of type UserInputController is created. The variable is assigned an instance of one of the concrete user input controllers depending on the type of the logged-in user. Then, MainController can generate the menu and get user input by calling the methods in UserInputController without the knowledge of the implementations of those methods.
+* Why: The Strategy Pattern minimizes the coupling between the client and strategies, since the client is not dependent on the implementations of the strategies and is coupled only to an abstraction of them. Also, the pattern complies with the Open-Closed Principle by separating the client from the implementations of the strategies, so that there will be few impact to the client when the implementations change.
+
+
+Dependency Injection
+* Classes: AdminInputController, AdminController
+* How: AdminInputController depends on AdminController, as AdminInputController calls methods in AdminController to process commands. The instance of AdminController is passed in as a parameter in the constructor of AdminInputController, instead of directly created in the constructor.
+* Why: The Dependency Injection Pattern separates the creation of an AdminController object from its usage, making AdminInputController and AdminController less coupled. Also, the pattern complies with the Open-Closed Principle as AdminInputController will not be modified when another implementation of AdminController is used. In addition, it makes the unit test of AdminInputController easier since we can use a mock AdminController.
+
+
+Simple Factory
+* Classes: MainController, UserInputController, OrganizerInputController, SpeakerUserInputController, AttendeeInputController, AdminUserInputController, UserInputControllerFactory
+* How: OrganizerInputController, SpeakerUserInputController, AttendeeInputController and AdminUserInputController inherit from abstract class UserInputController. Depending on the type of the logged-in user, an instance of one of the concrete user input controllers is created in MainController. We put all the user input controller constructor calls and the decision about which constructor to call in a separate class called UserInputControllerFactory, and use that class to instantiate UserInputControllerFactory in MainController.
+* Why: The Simple Factory Pattern encapsulates the creation process for user input controller objects so that the client (MainController) does not need to know that process, hence less coupled with user input controller classes.
+
+
+Facade
+* Classes: AdminController, TalkManager, SpeakerManager, RoomManager, SerializableGateway, RegisterController
+* How: AdminController is a facade in the program. It handles commands available to organizers, such as adding a speaker, adding a room and scheduling a talk. It contains instances of TalkManager, SpeakerManager, RoomManager, SerializableGateway and RegisterController as its subsystems. When it is processing a command, it will delegate actions to those subsystems. For example, when scheduling a talk, AdminController will first use TalkManager, SpeakerManager and RoomManager to check if the speaker and room are double booked. If not, it will use TalkManager to create the talk, and SpeakerManager and RoomManager to register the talk to the corresponding speaker and room. Finally, it will use SerializableGateway to persist the updated managers.
+* Why: A facade encapsulates complicated processes to complete certain tasks in a simple interface. The client does not need to initialize many objects, keep track of sophisticated dependencies, and be careful to execute appropriate methods in the correct order in order to complete a task. Instead, it can delegate all the heavy lifting to the facade by using the facade’s simple interface, so that the client code can become more manageable and the client can be less coupled with the complicated subsystems the facade encapsulates.
+
+Iterator
+- Class: MessageManager
+- How: Implement an iterator that iterates over all message entities stored in MessageManager.
+- Why: Because the MessageManager class have variables storing all messages, archived messages and unread messages. The iterator will
+iterate over all messages. If the data structure for messages changes, it is only necessary to change the iterator without changing
+all the methods that iterate over all messages, making the code more open/closed.
